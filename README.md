@@ -74,7 +74,9 @@ permissions:
 ## **📸 How It Works**  
 
 ### **1. Normal PR Flow**  
-![Working Example](image.png)  
+![image](https://github.com/user-attachments/assets/f5287a84-f955-4927-b229-97e3f782d1ef)
+![image](https://github.com/user-attachments/assets/d7975ffb-8338-4780-ba8d-03bd69bfc475)
+
 1. PR opened → Workflow triggers  
 2. Bot checks for duplicates → None found  
 3. Posts `@coderabbitai review` comment  
