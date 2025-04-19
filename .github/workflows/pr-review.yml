@@ -17,11 +17,7 @@ jobs:
           github-token: ${{ secrets.Bot }}
           script: |
             const pr = context.payload.pull_request;
-            const commentBody = `
-👋 Hi @${pr.user.login} — triggering @coderabbitai review via bot to save you some 💰!
-
-🤖 Review in progress... 🧠✨`;
-
+            const commentBody = "hello"
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
