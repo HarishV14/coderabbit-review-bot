@@ -1,26 +1,59 @@
-name: Coderabbit Review Bot
-
+name: Smart CoderabbitAI Reviewer
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened, ready_for_review]
 
 jobs:
-  comment-pr:
+  review-control:
     runs-on: ubuntu-latest
-
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+    
     steps:
-      - name: Comment using Bot Account
+      # Skip draft PRs
+      - name: Check for draft PR
+        if: github.event.pull_request.draft == true
+        run: exit 0
+        
+      # Skip internal PRs (same repo)
+      - name: Check for internal PR
+        if: github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        run: exit 0
+        
+      # Main comment with rate limiting
+      - name: Trigger CoderabbitAI review
         uses: actions/github-script@v6
         env:
           GITHUB_TOKEN: ${{ secrets.Bot }}
         with:
-          github-token: ${{ secrets.Bot }}
           script: |
-            const pr = context.payload.pull_request;
-            const commentBody = "@coderabbitai review"
-            await github.rest.issues.createComment({
+            // Check for existing comment to prevent duplicates
+            const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: pr.number,
-              body: commentBody
+              issue_number: context.payload.pull_request.number
             });
+            
+            const hasExistingReview = comments.data.some(c => 
+              c.user.login === 'coderabbitbot-testpress' && 
+              c.body.includes('@coderabbitai review')
+            );
+            
+            if (!hasExistingReview) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: "@coderabbitai review"
+              });
+              
+              // Add label for tracking
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['coderabbit-review-requested']
+              });
+            }
