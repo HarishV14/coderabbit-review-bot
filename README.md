@@ -1,5 +1,5 @@
 # **🚀 Smart CoderabbitAI Review Bot**  
-**Automated, Cost-Efficient Code Reviews for GitHub Teams**  
+**Automated, Cost-Efficient Code Reviews **  
 
 ---
 
