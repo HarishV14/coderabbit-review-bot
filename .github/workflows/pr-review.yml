@@ -12,9 +12,9 @@ jobs:
       - name: Comment using Bot Account
         uses: actions/github-script@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.Bot }}
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          github-token: ${{ secrets.Bot }}
           script: |
             const pr = context.payload.pull_request;
             const commentBody = `
