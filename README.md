@@ -5,10 +5,6 @@
 
 ## **✨ Key Features**  
 
-✅ **Centralized Cost Control**  
-- Single bot account triggers all reviews (no per-user billing)  
-- **Estimated 70-90% cost reduction** vs individual user triggers  
-
 ✅ **Smart PR Filtering**  
 - Automatically skips **draft PRs** (no wasted reviews)  
 - Ignores **internal same-repo PRs** (further cost savings)  
