@@ -1,6 +1,19 @@
-- name: Trigger review request
-  run: |
-    curl -X POST \
-      -H "Authorization: token ${{ secrets.Bot }}" \
-      -d '{"event":"REQUEST_CHANGES","body":"Automated review triggered."}' \
-      "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews"
+name: PR Review Trigger
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Trigger review request
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.BOT_TOKEN }}" \
+            -d '{"event":"REQUEST_CHANGES","body":"Automated review triggered."}' \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews"
