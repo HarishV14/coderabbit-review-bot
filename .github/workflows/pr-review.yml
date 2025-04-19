@@ -1,6 +1,30 @@
-- name: Trigger review request
-  run: |
-    curl -X POST \
-      -H "Authorization: token ${{ secrets.Bot }}" \
-      -d '{"event":"REQUEST_CHANGES","body":"Automated review triggered."}' \
-      "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews"
+name: Coderabbit Review Bot
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  comment-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment using Bot Account
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const commentBody = `
+👋 Hi @${pr.user.login} — triggering @coderabbitai review via bot to save you some 💰!
+
+🤖 Review in progress... 🧠✨`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: commentBody
+            });
