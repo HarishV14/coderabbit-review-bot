@@ -7,7 +7,6 @@
 
 ✅ **Smart PR Filtering**  
 - Automatically skips **draft PRs** (no wasted reviews)  
-- Ignores **internal same-repo PRs** (further cost savings)  
 
 ✅ **Duplicate Prevention**  
 - Checks for existing review requests before commenting  
@@ -32,11 +31,6 @@ on:
 - name: Check for draft PR
   if: github.event.pull_request.draft == true  # Skip draft PRs
   run: exit 0
-
-- name: Check for internal PR
-  if: github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name  # Skip internal PRs
-  run: exit 0
-```
 
 ### **3. Rate-Limited Review Trigger**  
 ```javascript
